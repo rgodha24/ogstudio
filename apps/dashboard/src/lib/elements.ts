@@ -20,7 +20,7 @@ export const INITIAL_ELEMENTS: OGElement[] = [
     visible: true,
     rotate: 0,
     blur: 0,
-    backgroundColor: "#ffffff",
+    color: { type: "color", color: "#ffffff" },
   },
 ];
 
@@ -87,7 +87,6 @@ export function createElementStyle(element: OGElement): CSSProperties {
     base = {
       ...base,
       display: "flex",
-      color: hexAlphaToRgba(element.color),
       fontFamily: element.fontFamily,
       fontWeight: element.fontWeight,
       fontSize: `${element.fontSize}px`,
@@ -105,6 +104,26 @@ export function createElementStyle(element: OGElement): CSSProperties {
       marginBottom: 0,
       textShadow,
     };
+
+    if (element.color.type === "gradient") {
+      // taken from the `gradients` example on satori playground
+      base = {
+        ...base,
+        backgroundImage:
+          element.color.gradient_direction === "radial"
+            ? `radial-gradient(${element.color.start}, ${element.color.end})`
+            : `linear-gradient(${element.color.angle}deg, ${element.color.start}, ${element.color.end})`,
+        backgroundClip: "text",
+        // @ts-expect-error
+        "-webkit-background-clip": "text",
+        color: "transparent",
+      };
+    } else {
+      base = {
+        ...base,
+        color: hexAlphaToRgba(element.color.color),
+      };
+    }
   }
 
   if (element.tag === "div") {
@@ -112,14 +131,24 @@ export function createElementStyle(element: OGElement): CSSProperties {
       ...base,
       display: "flex",
       borderRadius: element.radius ? `${element.radius}px` : undefined,
-      background: element.backgroundImage
-        ? undefined
-        : element.gradient
-          ? element.gradient.type === "radial"
-            ? `radial-gradient(${element.gradient.start}, ${element.gradient.end})`
-            : `linear-gradient(${element.gradient.angle}deg, ${element.gradient.start}, ${element.gradient.end})`
-          : hexAlphaToRgba(element.backgroundColor),
     };
+
+    if (element.color.type === "gradient") {
+      base = {
+        ...base,
+        background:
+          element.color.gradient_direction === "radial"
+            ? `radial-gradient(${element.color.start}, ${element.color.end})`
+            : `linear-gradient(${element.color.angle}deg, ${element.color.start}, ${element.color.end})`,
+      };
+    } else if (element.color.type === "color") {
+      base = {
+        ...base,
+        background: hexAlphaToRgba(element.color.color),
+      };
+    } else {
+      // noop for images
+    }
   }
 
   // Filter out undefined values
@@ -131,10 +160,10 @@ export function createElementStyle(element: OGElement): CSSProperties {
 export function createImgElementStyle(element: OGElement): CSSProperties {
   let base: CSSProperties = {};
 
-  if (element.tag === "div" && element.backgroundImage) {
+  if (element.tag === "div" && element.color.type === "image") {
     base = {
       ...base,
-      objectFit: element.backgroundSize === "cover" ? "cover" : "contain",
+      objectFit: element.color.size,
       borderRadius: element.radius ? `${element.radius}px` : undefined,
     };
   }
@@ -151,15 +180,15 @@ export function getDynamicTextKeys(elements: OGElement[]) {
       (element) =>
         element.tag === "span" ||
         (element.tag === "div" &&
-          element.backgroundImage &&
-          !element.backgroundImage.startsWith("http")),
+          element.color.type === "image" &&
+          !element.color.src.startsWith("http")),
     )
     .map((element) => {
       if (element.tag === "div") {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We know it's not null
-        return element.backgroundImage!;
+        // we already know it's an image based background
+        return (element.color as any).src;
+      } else {
+        return element.content;
       }
-
-      return element.content;
     });
 }

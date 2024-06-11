@@ -56,7 +56,7 @@ describe("createElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 0,
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -84,7 +84,7 @@ describe("createElementStyle", () => {
       visible: true,
       rotate: 120,
       blur: 0,
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -113,7 +113,7 @@ describe("createElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 10,
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -148,7 +148,7 @@ describe("createElementStyle", () => {
           width: 2,
           style: "outside",
         },
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       });
 
       expect(style).toMatchInlineSnapshot(`
@@ -182,7 +182,7 @@ describe("createElementStyle", () => {
           width: 4,
           style: "inside",
         },
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       });
 
       expect(style).toMatchInlineSnapshot(`
@@ -219,7 +219,7 @@ describe("createElementStyle", () => {
         x: 2,
         y: 2,
       },
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -260,7 +260,7 @@ describe("createElementStyle", () => {
         x: 2,
         y: 2,
       },
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -291,7 +291,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -341,7 +341,7 @@ describe("createElementStyle", () => {
           y: 2,
         },
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -385,7 +385,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -428,7 +428,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -473,7 +473,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         radius: 4,
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       });
 
       expect(style).toMatchInlineSnapshot(`
@@ -503,12 +503,12 @@ describe("createElementStyle", () => {
           visible: true,
           rotate: 0,
           blur: 0,
-          backgroundColor: "#ffffff",
-          gradient: {
+          color: {
+            type: "gradient",
             start: "#ff0000",
             end: "#00ff00",
             angle: 45,
-            type: "linear",
+            gradient_direction: "linear",
           },
         });
 
@@ -537,12 +537,12 @@ describe("createElementStyle", () => {
           visible: true,
           rotate: 0,
           blur: 0,
-          backgroundColor: "#ffffff",
-          gradient: {
+          color: {
+            type: "gradient",
             start: "#ff0000",
             end: "#00ff00",
             angle: 0,
-            type: "radial",
+            gradient_direction: "radial",
           },
         });
 
@@ -575,9 +575,11 @@ describe("createImgElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 0,
-      backgroundColor: "#ffffff",
-      backgroundImage: "https://via.placeholder.com/150",
-      backgroundSize: "cover",
+      color: {
+        type: "image",
+        src: "https://via.placeholder.com/150",
+        size: "cover",
+      },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -599,9 +601,11 @@ describe("createImgElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 0,
-      backgroundColor: "#ffffff",
-      backgroundImage: "https://via.placeholder.com/150",
-      backgroundSize: "contain",
+      color: {
+        type: "image",
+        src: "https://via.placeholder.com/150",
+        size: "contain",
+      },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -624,9 +628,11 @@ describe("createImgElementStyle", () => {
       rotate: 0,
       blur: 0,
       radius: 10,
-      backgroundColor: "#ffffff",
-      backgroundImage: "https://via.placeholder.com/150",
-      backgroundSize: "cover",
+      color: {
+        type: "image",
+        src: "https://via.placeholder.com/150",
+        size: "cover",
+      },
     });
 
     expect(style).toMatchInlineSnapshot(`

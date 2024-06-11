@@ -56,37 +56,39 @@ export function elementsToReactElements(
       children: elements
         .filter((element) => element.visible)
         .map((element) => {
-          const isImage = element.tag === "div" && element.backgroundImage;
-          let dynamicText;
-
-          if (dynamicTexts) {
-            if (element.tag === "span") {
-              dynamicText = dynamicTexts[element.content];
+          if (element.tag === "div" && element.color.type === "image") {
+            let src: string;
+            if (!element.color.src.startsWith("http") && dynamicTexts) {
+              src = dynamicTexts[element.color.src];
+            } else {
+              src = element.color.src;
             }
 
-            if (
-              element.tag === "div" &&
-              element.backgroundImage &&
-              !element.backgroundImage.startsWith("http")
-            ) {
-              dynamicText = dynamicTexts[element.backgroundImage];
-            }
+            return {
+              type: "img",
+              props: {
+                style: {
+                  ...createElementStyle(element),
+                  ...createImgElementStyle(element),
+                },
+                src,
+              },
+            };
           }
 
+          // if tag isnt a div, get the (maybe dynamic) text out of it
+          const text =
+            element.tag === "div"
+              ? ""
+              : dynamicTexts
+                ? dynamicTexts[element.content]
+                : element.content;
+
           return {
-            type: isImage ? "img" : element.tag,
+            type: element.tag,
             props: {
-              style: isImage
-                ? {
-                    ...createElementStyle(element),
-                    ...createImgElementStyle(element),
-                  }
-                : createElementStyle(element),
-              ...(isImage
-                ? { src: dynamicText ? dynamicText : element.backgroundImage }
-                : {}),
-              ...(element.tag === "p" ? { children: [element.content] } : {}),
-              ...(!isImage && dynamicText ? { children: [dynamicText] } : {}),
+              style: createElementStyle(element),
+              children: [text],
             },
           };
         }),
