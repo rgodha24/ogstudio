@@ -16,7 +16,6 @@ import { SquareIcon } from "../icons/SquareIcon";
 import { LinkIcon } from "../icons/LinkIcon";
 import { useElementsStore } from "../../stores/elementsStore";
 import { ColorPicker } from "../ColorPicker";
-import { useEffect, useRef } from "react";
 
 interface ColorSelectorProps {
   selectedElement: OGElement;
@@ -25,14 +24,6 @@ interface ColorSelectorProps {
 export function ElementColorSelector({ selectedElement }: ColorSelectorProps) {
   const updateElement = useElementsStore((state) => state.updateElement);
   const selectedColorType = selectedElement.color.type;
-  const prevSolidColor = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (selectedColorType === "color") {
-      prevSolidColor.current = selectedElement.color.color;
-    }
-  }, [selectedElement]);
-
   const canBeImage = selectedElement.tag === "div";
 
   const Reset = (
@@ -43,7 +34,7 @@ export function ElementColorSelector({ selectedElement }: ColorSelectorProps) {
           ...selectedElement,
           color: {
             type: "color",
-            color: prevSolidColor.current || "#000000",
+            color: "#000000",
           }
         });
       }}
@@ -68,7 +59,7 @@ export function ElementColorSelector({ selectedElement }: ColorSelectorProps) {
                 ...selectedElement,
                 color: {
                   type: "color",
-                  color: prevSolidColor.current || "#000000",
+                  color: "#000000",
                 }
               });
             }}
