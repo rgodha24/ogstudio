@@ -42,7 +42,7 @@ export interface ReactElements {
  */
 export function elementsToReactElements(
   elements: OGElement[],
-  dynamicTexts?: Record<string, string>,
+  dynamicTexts: Record<string, string> = {},
 ): ReactElements {
   // We first render the wrapper element, then all the childrens
   return {
@@ -57,13 +57,6 @@ export function elementsToReactElements(
         .filter((element) => element.visible)
         .map((element) => {
           if (element.tag === "div" && element.color.type === "image") {
-            let src: string;
-            if (!element.color.src.startsWith("http") && dynamicTexts) {
-              src = dynamicTexts[element.color.src];
-            } else {
-              src = element.color.src;
-            }
-
             return {
               type: "img",
               props: {
@@ -71,7 +64,7 @@ export function elementsToReactElements(
                   ...createElementStyle(element),
                   ...createImgElementStyle(element),
                 },
-                src,
+                src: dynamicTexts[element.color.src] || element.color.src,
               },
             };
           }
@@ -80,9 +73,7 @@ export function elementsToReactElements(
           const text =
             element.tag === "div"
               ? ""
-              : dynamicTexts
-                ? dynamicTexts[element.content]
-                : element.content;
+              : dynamicTexts[element.content] || element.content;
 
           return {
             type: element.tag,
