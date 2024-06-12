@@ -42,7 +42,7 @@ export interface ReactElements {
  */
 export function elementsToReactElements(
   elements: OGElement[],
-  dynamicTexts?: Record<string, string>,
+  dynamicTexts: Record<string, string> = {},
 ): ReactElements {
   // We first render the wrapper element, then all the childrens
   return {
@@ -56,37 +56,34 @@ export function elementsToReactElements(
       children: elements
         .filter((element) => element.visible)
         .map((element) => {
-          const isImage = element.tag === "div" && element.backgroundImage;
-          let dynamicText;
+          if (element.tag === "div" && element.color.type === "image") {
+            return {
+              type: "img",
+              props: {
+                style: {
+                  ...createElementStyle(element),
+                  ...createImgElementStyle(element),
+                },
+                src: dynamicTexts[element.color.src] || element.color.src,
+              },
+            };
+          }
 
-          if (dynamicTexts) {
-            if (element.tag === "span") {
-              dynamicText = dynamicTexts[element.content];
-            }
+          let text = "";
 
-            if (
-              element.tag === "div" &&
-              element.backgroundImage &&
-              !element.backgroundImage.startsWith("http")
-            ) {
-              dynamicText = dynamicTexts[element.backgroundImage];
-            }
+          if (element.tag === "span") {
+            text = dynamicTexts[element.content] || "";
+          } else if (element.tag === "p") {
+            text = element.content;
+          } else {
+            // noop for divs
           }
 
           return {
-            type: isImage ? "img" : element.tag,
+            type: element.tag,
             props: {
-              style: isImage
-                ? {
-                    ...createElementStyle(element),
-                    ...createImgElementStyle(element),
-                  }
-                : createElementStyle(element),
-              ...(isImage
-                ? { src: dynamicText ? dynamicText : element.backgroundImage }
-                : {}),
-              ...(element.tag === "p" ? { children: [element.content] } : {}),
-              ...(!isImage && dynamicText ? { children: [dynamicText] } : {}),
+              style: createElementStyle(element),
+              children: [text].filter(Boolean),
             },
           };
         }),

@@ -23,7 +23,7 @@ describe("elementsToReactElements", () => {
         visible: true,
         rotate: 0,
         blur: 0,
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       },
     ]);
     expect(data).toMatchSnapshot();
@@ -42,7 +42,7 @@ describe("elementsToReactElements", () => {
         visible: false,
         rotate: 0,
         blur: 0,
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       },
     ]);
     expect(data).toMatchSnapshot();
@@ -62,7 +62,7 @@ describe("elementsToReactElements", () => {
         rotate: 0,
         blur: 0,
         content: "Text",
-        color: "#000000",
+        color: { type: "color", color: "#000000" },
         fontFamily: "Inter",
         fontWeight: 400,
         lineHeight: 1,
@@ -88,7 +88,7 @@ describe("elementsToReactElements", () => {
         rotate: 0,
         blur: 0,
         content: "dynamic",
-        color: "#000000",
+        color: { type: "color", color: "#000000" },
         fontFamily: "Inter",
         fontWeight: 400,
         lineHeight: 1,
@@ -115,7 +115,7 @@ describe("elementsToReactElements", () => {
           rotate: 0,
           blur: 0,
           content: "dynamic",
-          color: "#000000",
+          color: { type: "color", color: "#000000" },
           fontFamily: "Inter",
           fontWeight: 400,
           lineHeight: 1,
@@ -145,8 +145,11 @@ describe("elementsToReactElements", () => {
           visible: true,
           rotate: 0,
           blur: 0,
-          backgroundImage: "dynamic",
-          backgroundColor: "#000000",
+          color: {
+            type: "image",
+            src: "dynamic",
+            size: "contain",
+          },
         },
       ],
       {
@@ -224,7 +227,7 @@ describe("renderToImg", () => {
         rotate: 0,
         blur: 0,
         content: "Text",
-        color: "#000000",
+        color: { type: "color", color: "#000000" },
         fontFamily: "Inter",
         fontWeight: 400,
         lineHeight: 1,

@@ -56,7 +56,7 @@ describe("createElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 0,
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -84,7 +84,7 @@ describe("createElementStyle", () => {
       visible: true,
       rotate: 120,
       blur: 0,
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -113,7 +113,7 @@ describe("createElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 10,
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -148,7 +148,7 @@ describe("createElementStyle", () => {
           width: 2,
           style: "outside",
         },
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       });
 
       expect(style).toMatchInlineSnapshot(`
@@ -182,7 +182,7 @@ describe("createElementStyle", () => {
           width: 4,
           style: "inside",
         },
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       });
 
       expect(style).toMatchInlineSnapshot(`
@@ -219,7 +219,7 @@ describe("createElementStyle", () => {
         x: 2,
         y: 2,
       },
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -260,7 +260,7 @@ describe("createElementStyle", () => {
         x: 2,
         y: 2,
       },
-      backgroundColor: "#ffffff",
+      color: { type: "color", color: "#ffffff" },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -291,7 +291,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -341,7 +341,7 @@ describe("createElementStyle", () => {
           y: 2,
         },
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -385,7 +385,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -428,7 +428,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         content: "Hello",
-        color: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
         fontFamily: "Inter",
         fontSize: 12,
         fontWeight: 400,
@@ -457,6 +457,110 @@ describe("createElementStyle", () => {
         }
       `);
     });
+
+    it("should generate style with linear text gradient", () => {
+      const style = createElementStyle({
+        tag: "p",
+        id: createElementId(),
+        name: "Box",
+        x: 10,
+        y: 20,
+        width: 100,
+        height: 200,
+        visible: true,
+        rotate: 0,
+        blur: 0,
+        content: "Hello",
+        color: {
+          type: "gradient",
+          start: "#ff0000",
+          end: "#00ff00",
+          angle: 45,
+          gradient_direction: "linear",
+        },
+        fontFamily: "Inter",
+        fontSize: 12,
+        fontWeight: 400,
+        lineHeight: 1,
+        letterSpacing: 0,
+        align: "left",
+      });
+
+      expect(style).toMatchInlineSnapshot(`
+        {
+          "WebkitBackgroundClip": "text",
+          "backgroundClip": "text",
+          "backgroundImage": "linear-gradient(45deg, #ff0000, #00ff00)",
+          "color": "transparent",
+          "display": "flex",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": 400,
+          "height": "200px",
+          "justifyContent": "flex-start",
+          "left": "10px",
+          "letterSpacing": "0px",
+          "lineHeight": 1,
+          "marginBottom": 0,
+          "marginTop": 0,
+          "position": "absolute",
+          "top": "20px",
+          "width": "100px",
+        }
+      `);
+    });
+
+    it("should generate style with radial text gradient", () => {
+      const style = createElementStyle({
+        tag: "p",
+        id: createElementId(),
+        name: "Box",
+        x: 10,
+        y: 20,
+        width: 100,
+        height: 200,
+        visible: true,
+        rotate: 0,
+        blur: 0,
+        content: "Hello",
+        color: {
+          type: "gradient",
+          start: "#ff0000",
+          end: "#00ff00",
+          angle: 45,
+          gradient_direction: "radial",
+        },
+        fontFamily: "Inter",
+        fontSize: 12,
+        fontWeight: 400,
+        lineHeight: 1,
+        letterSpacing: 0,
+        align: "left",
+      });
+
+      expect(style).toMatchInlineSnapshot(`
+        {
+          "WebkitBackgroundClip": "text",
+          "backgroundClip": "text",
+          "backgroundImage": "radial-gradient(#ff0000, #00ff00)",
+          "color": "transparent",
+          "display": "flex",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": 400,
+          "height": "200px",
+          "justifyContent": "flex-start",
+          "left": "10px",
+          "letterSpacing": "0px",
+          "lineHeight": 1,
+          "marginBottom": 0,
+          "marginTop": 0,
+          "position": "absolute",
+          "top": "20px",
+          "width": "100px",
+        }
+      `);
+    });
   });
 
   describe("div", () => {
@@ -473,7 +577,7 @@ describe("createElementStyle", () => {
         rotate: 0,
         blur: 0,
         radius: 4,
-        backgroundColor: "#ffffff",
+        color: { type: "color", color: "#ffffff" },
       });
 
       expect(style).toMatchInlineSnapshot(`
@@ -503,12 +607,12 @@ describe("createElementStyle", () => {
           visible: true,
           rotate: 0,
           blur: 0,
-          backgroundColor: "#ffffff",
-          gradient: {
+          color: {
+            type: "gradient",
             start: "#ff0000",
             end: "#00ff00",
             angle: 45,
-            type: "linear",
+            gradient_direction: "linear",
           },
         });
 
@@ -537,12 +641,12 @@ describe("createElementStyle", () => {
           visible: true,
           rotate: 0,
           blur: 0,
-          backgroundColor: "#ffffff",
-          gradient: {
+          color: {
+            type: "gradient",
             start: "#ff0000",
             end: "#00ff00",
             angle: 0,
-            type: "radial",
+            gradient_direction: "radial",
           },
         });
 
@@ -575,9 +679,11 @@ describe("createImgElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 0,
-      backgroundColor: "#ffffff",
-      backgroundImage: "https://via.placeholder.com/150",
-      backgroundSize: "cover",
+      color: {
+        type: "image",
+        src: "https://via.placeholder.com/150",
+        size: "cover",
+      },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -599,9 +705,11 @@ describe("createImgElementStyle", () => {
       visible: true,
       rotate: 0,
       blur: 0,
-      backgroundColor: "#ffffff",
-      backgroundImage: "https://via.placeholder.com/150",
-      backgroundSize: "contain",
+      color: {
+        type: "image",
+        src: "https://via.placeholder.com/150",
+        size: "contain",
+      },
     });
 
     expect(style).toMatchInlineSnapshot(`
@@ -624,9 +732,11 @@ describe("createImgElementStyle", () => {
       rotate: 0,
       blur: 0,
       radius: 10,
-      backgroundColor: "#ffffff",
-      backgroundImage: "https://via.placeholder.com/150",
-      backgroundSize: "cover",
+      color: {
+        type: "image",
+        src: "https://via.placeholder.com/150",
+        size: "cover",
+      },
     });
 
     expect(style).toMatchInlineSnapshot(`

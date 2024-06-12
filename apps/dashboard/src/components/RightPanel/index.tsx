@@ -1,6 +1,6 @@
 import { Flex, Separator } from "@radix-ui/themes";
 import { useElementsStore } from "../../stores/elementsStore";
-import { BackgroundSection } from "./BackgroundSection";
+import { ElementColorSelector } from "./ElementColorSelector";
 import { BorderSection } from "./BorderSection";
 import { FontSection } from "./FontSection";
 import { MiscellanousSection } from "./MiscellanousSection";
@@ -24,7 +24,7 @@ export function RightPanel() {
         <SizePositionSection selectedElement={selectedElementData} />
         <Separator className="opacity-50" size="4" />
         <FontSection selectedElement={selectedElementData} />
-        <BackgroundSection selectedElement={selectedElementData} />
+        <ElementColorSelector selectedElement={selectedElementData} />
         <Separator className="opacity-50" size="4" />
         <BorderSection selectedElement={selectedElementData} />
         <Separator className="opacity-50" size="4" />

@@ -64,10 +64,10 @@ export function Element({ element }: ElementProps) {
 
       const initialRotate = isResizer
         ? Number(
-            target
-              .parentElement!.style.transform.replace("rotate(", "")
-              .replace("deg)", ""),
-          )
+          target
+            .parentElement!.style.transform.replace("rotate(", "")
+            .replace("deg)", ""),
+        )
         : 0;
 
       let changed = false;
@@ -325,10 +325,10 @@ export function Element({ element }: ElementProps) {
           >
             {element.tag === "p" ? element.content : null}
             {element.tag === "span" ? "Dynamic text" : null}
-            {element.tag === "div" && element.backgroundImage ? (
+            {element.tag === "div" && element.color.type === "image" ? (
               <img
                 alt=""
-                src={element.backgroundImage}
+                src={element.color.src}
                 style={{
                   pointerEvents: "none",
                   ...createImgElementStyle(element),
