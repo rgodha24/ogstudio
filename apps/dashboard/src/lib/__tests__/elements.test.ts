@@ -457,6 +457,110 @@ describe("createElementStyle", () => {
         }
       `);
     });
+
+    it("should generate style with linear text gradient", () => {
+      const style = createElementStyle({
+        tag: "p",
+        id: createElementId(),
+        name: "Box",
+        x: 10,
+        y: 20,
+        width: 100,
+        height: 200,
+        visible: true,
+        rotate: 0,
+        blur: 0,
+        content: "Hello",
+        color: {
+          type: "gradient",
+          start: "#ff0000",
+          end: "#00ff00",
+          angle: 45,
+          gradient_direction: "linear",
+        },
+        fontFamily: "Inter",
+        fontSize: 12,
+        fontWeight: 400,
+        lineHeight: 1,
+        letterSpacing: 0,
+        align: "left",
+      });
+
+      expect(style).toMatchInlineSnapshot(`
+        {
+          "WebkitBackgroundClip": "text",
+          "backgroundClip": "text",
+          "backgroundImage": "linear-gradient(45deg, #ff0000, #00ff00)",
+          "color": "transparent",
+          "display": "flex",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": 400,
+          "height": "200px",
+          "justifyContent": "flex-start",
+          "left": "10px",
+          "letterSpacing": "0px",
+          "lineHeight": 1,
+          "marginBottom": 0,
+          "marginTop": 0,
+          "position": "absolute",
+          "top": "20px",
+          "width": "100px",
+        }
+      `);
+    });
+
+    it("should generate style with radial text gradient", () => {
+      const style = createElementStyle({
+        tag: "p",
+        id: createElementId(),
+        name: "Box",
+        x: 10,
+        y: 20,
+        width: 100,
+        height: 200,
+        visible: true,
+        rotate: 0,
+        blur: 0,
+        content: "Hello",
+        color: {
+          type: "gradient",
+          start: "#ff0000",
+          end: "#00ff00",
+          angle: 45,
+          gradient_direction: "radial",
+        },
+        fontFamily: "Inter",
+        fontSize: 12,
+        fontWeight: 400,
+        lineHeight: 1,
+        letterSpacing: 0,
+        align: "left",
+      });
+
+      expect(style).toMatchInlineSnapshot(`
+        {
+          "WebkitBackgroundClip": "text",
+          "backgroundClip": "text",
+          "backgroundImage": "radial-gradient(#ff0000, #00ff00)",
+          "color": "transparent",
+          "display": "flex",
+          "fontFamily": "Inter",
+          "fontSize": "12px",
+          "fontWeight": 400,
+          "height": "200px",
+          "justifyContent": "flex-start",
+          "left": "10px",
+          "letterSpacing": "0px",
+          "lineHeight": 1,
+          "marginBottom": 0,
+          "marginTop": 0,
+          "position": "absolute",
+          "top": "20px",
+          "width": "100px",
+        }
+      `);
+    });
   });
 
   describe("div", () => {

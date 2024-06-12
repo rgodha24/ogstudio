@@ -148,7 +148,7 @@ describe("elementsToReactElements", () => {
           color: {
             type: "image",
             src: "dynamic",
-            size: "cover",
+            size: "contain",
           },
         },
       ],

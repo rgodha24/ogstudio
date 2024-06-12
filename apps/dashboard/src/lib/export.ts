@@ -69,17 +69,21 @@ export function elementsToReactElements(
             };
           }
 
-          // if tag isnt a div, get the (maybe dynamic) text out of it
-          const text =
-            element.tag === "div"
-              ? ""
-              : dynamicTexts[element.content] || element.content;
+          let text = "";
+
+          if (element.tag === "span") {
+            text = dynamicTexts[element.content] || "";
+          } else if (element.tag === "p") {
+            text = element.content;
+          } else {
+            // noop for divs
+          }
 
           return {
             type: element.tag,
             props: {
               style: createElementStyle(element),
-              children: [text],
+              children: [text].filter(Boolean),
             },
           };
         }),
