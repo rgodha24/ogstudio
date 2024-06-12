@@ -31,7 +31,7 @@ export function EditorToolbar() {
                   rotate: 0,
                   blur: 0,
                   content: "Text",
-                  color: "#000000",
+                  color: { type: "color", color: "#000000" },
                   fontFamily: "Inter",
                   fontWeight: 400,
                   lineHeight: 1,
@@ -59,7 +59,7 @@ export function EditorToolbar() {
                   rotate: 0,
                   blur: 0,
                   radius: 0,
-                  backgroundColor: "#000000",
+                  color: { type: "color", color: "#000000" },
                 }),
               );
             }}
@@ -80,7 +80,7 @@ export function EditorToolbar() {
                   visible: true,
                   rotate: 0,
                   blur: 0,
-                  backgroundColor: "#000000",
+                  color: { type: "color", color: "#000000" },
                   radius: 999,
                 }),
               );
@@ -103,9 +103,11 @@ export function EditorToolbar() {
                   rotate: 0,
                   blur: 0,
                   radius: 0,
-                  backgroundColor: "#000000",
-                  backgroundImage: "https://source.unsplash.com/random",
-                  backgroundSize: "cover",
+                  color: {
+                    type: "image",
+                    src: "https://source.unsplash.com/random",
+                    size: "cover"
+                  }
                 }),
               );
             }}
@@ -127,7 +129,7 @@ export function EditorToolbar() {
                   rotate: 0,
                   blur: 0,
                   content: "dynamic",
-                  color: "#000000",
+                  color: { type: "color", color: "#000000" },
                   fontFamily: "Inter",
                   fontWeight: 400,
                   lineHeight: 1,

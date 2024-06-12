@@ -47,17 +47,17 @@ export const ElementRow = memo(({ element }: ElementRowProps) => {
     if (!finalName) {
       if (element.tag === "p") {
         finalName = "Text";
-      } else if (element.tag === "div" && element.backgroundImage) {
+      } else if (element.tag === "div" && element.color.type === "image") {
         finalName = "Image";
       } else if (
         element.tag === "div" &&
-        !element.backgroundImage &&
+        element.color.type !== "image" &&
         !element.radius
       ) {
         finalName = "Box";
       } else if (
         element.tag === "div" &&
-        !element.backgroundImage &&
+        element.color.type !== "image" &&
         element.radius
       ) {
         finalName = "Rounded box";
@@ -109,15 +109,15 @@ export const ElementRow = memo(({ element }: ElementRowProps) => {
         variant={isDragging ? "surface" : "ghost"}
       >
         {element.tag === "p" ? <TextIcon height="1.4em" width="1.4em" /> : null}
-        {element.tag === "div" && element.backgroundImage ? (
+        {element.tag === "div" && element.color.type === "image" ? (
           <ImageIcon height="1.4em" width="1.4em" />
         ) : null}
         {element.tag === "div" &&
-        !element.backgroundImage &&
-        !element.radius ? (
+          element.color.type !== "image" &&
+          !element.radius ? (
           <BoxIcon height="1.4em" width="1.4em" />
         ) : null}
-        {element.tag === "div" && !element.backgroundImage && element.radius ? (
+        {element.tag === "div" && element.color.type !== "image" && element.radius ? (
           <CircleIcon height="1.4em" width="1.4em" />
         ) : null}
         {element.tag === "span" ? (

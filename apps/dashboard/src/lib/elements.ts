@@ -114,8 +114,7 @@ export function createElementStyle(element: OGElement): CSSProperties {
             ? `radial-gradient(${element.color.start}, ${element.color.end})`
             : `linear-gradient(${element.color.angle}deg, ${element.color.start}, ${element.color.end})`,
         backgroundClip: "text",
-        // @ts-expect-error
-        "-webkit-background-clip": "text",
+        WebkitBackgroundClip: "text",
         color: "transparent",
       };
     } else {
