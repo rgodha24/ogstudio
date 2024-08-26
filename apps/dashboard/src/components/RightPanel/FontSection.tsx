@@ -1,4 +1,4 @@
-import { Flex, Grid, Text, Select, TextField, Tooltip } from "@radix-ui/themes";
+import { Flex, Grid, Text, Select, TextField, Tooltip, Separator } from "@radix-ui/themes";
 import type { OGElement } from "../../lib/types";
 import { FontSizeIcon } from "../icons/FontSizeIcon";
 import { LineHeightIcon } from "../icons/LineHeightIcon";
@@ -106,15 +106,6 @@ export function FontSection({ selectedElement }: FontSectionProps) {
           </Tooltip>
           <TextField.Slot>px</TextField.Slot>
         </TextField.Root>
-        <ColorPicker
-          onChange={(color) => {
-            updateElement({
-              ...selectedElement,
-              color,
-            });
-          }}
-          value={selectedElement.color}
-        />
         <TextField.Root
           color="gray"
           max={5}

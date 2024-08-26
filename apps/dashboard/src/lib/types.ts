@@ -25,7 +25,7 @@ export type OGElement = (OGPElement | OGDynamicElement | OGDivElement) & {
 export interface OGPElement {
   tag: "p";
   content: string;
-  color: string;
+  color: Color | Gradient;
   fontFamily: string;
   fontWeight: number;
   fontSize: number;
@@ -41,13 +41,24 @@ export type OGDynamicElement = Omit<OGPElement, "tag"> & {
 export interface OGDivElement {
   tag: "div";
   radius?: number;
-  backgroundColor: string;
-  gradient?: {
+  color: Gradient | Image | Color
+}
+
+export type Gradient = {
+    type: "gradient"
     start: string;
     end: string;
     angle: number;
-    type: "linear" | "radial";
+    gradient_direction: "linear" | "radial";
   };
-  backgroundImage?: string;
-  backgroundSize?: "cover" | "contain";
+
+export type Image = {
+  type: "image"
+  src: string;
+  size: "cover" | "contain";
+}
+
+export type Color = {
+  type: "color";
+  color: string
 }

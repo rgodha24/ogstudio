@@ -6,6 +6,7 @@ exports[`elementsToReactElements > should ignore dynamic texts by default 1`] = 
     "children": [
       {
         "props": {
+          "children": [],
           "style": {
             "color": "rgba(0, 0, 0, 1)",
             "display": "flex",
@@ -97,6 +98,7 @@ exports[`elementsToReactElements > should render to react elements 1`] = `
     "children": [
       {
         "props": {
+          "children": [],
           "style": {
             "background": "rgba(255, 255, 255, 1)",
             "display": "flex",

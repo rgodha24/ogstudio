@@ -18,6 +18,9 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**"
+      ],
+      "dependsOn": [
+        "@ogstudio/db#migrate"
       ]
     },
     "dev": {
