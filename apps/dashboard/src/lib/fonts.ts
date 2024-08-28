@@ -1,6 +1,6 @@
 import type { OGElement } from "./types";
 
-export const FONTS = [
+export const DEFAULT_FONTS = [
   "Roboto",
   "Open Sans",
   "Montserrat",
@@ -11,43 +11,37 @@ export const FONTS = [
   "Raleway",
   "Nunito",
   "Ubuntu",
-] as const;
-
-export type Font = (typeof FONTS)[number];
-
-export const FONT_WEIGHTS = {
-  Roboto: [100, 300, 400, 500, 700, 900],
-  "Open Sans": [300, 400, 600, 700, 800],
-  Montserrat: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-  Lato: [100, 300, 400, 700, 900],
-  Poppins: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-  Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-  Oswald: [200, 300, 400, 500, 600, 700],
-  Raleway: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-  Nunito: [200, 300, 400, 500, 600, 700, 800, 900],
-  Ubuntu: [300, 400, 500, 700],
-} satisfies Record<Font, number[]>;
+];
 
 /**
- * Try to load a font from Bunny Fonts, if the font is not already loaded.
+ * Adds the font stylesheet to the document body
  * The font is loaded asynchronously, so it may not be available immediately
  * and the caller should make sure to wait for the font to be loaded before
  * using it.
  */
 export function maybeLoadFont(font: string, weight: number) {
-  const id = `font-${font}-${weight}`;
+  const fontID = font.toLowerCase().replaceAll(" ", "-");
+  const fontURL = getFontURL(font, weight);
+  const id = `font-${fontID}-${weight}`;
 
   if (document.getElementById(id)) {
     return;
   }
 
-  const link = document.createElement("link");
-  link.id = id;
-  link.rel = "stylesheet";
-  link.href = `https://fonts.bunny.net/css?family=${font
-    .toLowerCase()
-    .replace(" ", "-")}:${weight}`;
-  document.head.appendChild(link);
+  const style = document.createElement("style");
+  style.id = id;
+
+  const fontFace = `
+    @font-face {
+      font-family: "${font}";
+      src: url("${fontURL}") format("woff");
+      font-weight: ${weight};
+      font-style: normal;
+    }
+  `;
+
+  style.appendChild(document.createTextNode(fontFace));
+  document.head.appendChild(style);
 }
 
 export interface FontData {
@@ -76,21 +70,16 @@ export async function loadFonts(elements: OGElement[]): Promise<FontData[]> {
           return fontCache;
         }
 
-        // @ts-expect-error -- wrong inference
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access -- wrong inference
-        const fontName = element.fontFamily.toLowerCase().replace(" ", "-");
+        if (element.tag !== "p" && element.tag !== "span")
+          throw new Error("unreachable!");
+
         const data = await fetch(
-          // @ts-expect-error -- wrong inference
-          `https://fonts.bunny.net/${fontName}/files/${fontName}-latin-${element.fontWeight}-normal.woff`,
+          getFontURL(element.fontFamily, element.fontWeight),
         ).then((response) => response.arrayBuffer());
 
         const fontData: FontData = {
-          // @ts-expect-error -- wrong inference
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- wrong inference
           name: element.fontFamily,
           data,
-          // @ts-expect-error -- wrong inference
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- wrong inference
           weight: element.fontWeight,
         };
 
@@ -98,4 +87,41 @@ export async function loadFonts(elements: OGElement[]): Promise<FontData[]> {
         return fontData;
       }),
   );
+}
+
+export async function getFontData() {
+  interface FontsourceFont {
+    id: string;
+    family: string;
+    subsets: string[];
+    weights: number[];
+    styles: string[];
+    defSubset: string;
+    variable: boolean;
+    lastModified: Date;
+    category: string;
+    license: string;
+    type: string;
+  }
+
+  const res = await fetch("https://api.fontsource.org/v1/fonts", {
+    cache: "no-store",
+  });
+
+  const data = (await res.json()) as FontsourceFont[];
+
+  return data
+    .filter(({ styles }) => styles.includes("normal"))
+    .filter(({ defSubset }) => defSubset === "latin")
+    .map((font) => ({
+      name: font.family,
+      weights: font.weights,
+    }));
+}
+
+export type Font = Awaited<ReturnType<typeof getFontData>>[number];
+
+export function getFontURL(fontName: string, weight: number) {
+  const fontID = fontName.toLowerCase().replaceAll(" ", "-");
+  return `https://cdn.jsdelivr.net/fontsource/fonts/${fontID}@latest/latin-${weight}-normal.woff`;
 }

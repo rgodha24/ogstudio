@@ -1,13 +1,13 @@
 import { Flex, Grid, Text, Select, TextField, Tooltip, Separator } from "@radix-ui/themes";
 import type { OGElement } from "../../lib/types";
-import type { Font } from "../../lib/fonts";
-import { FONTS, FONT_WEIGHTS } from "../../lib/fonts";
 import { FontSizeIcon } from "../icons/FontSizeIcon";
 import { LineHeightIcon } from "../icons/LineHeightIcon";
 import { LetterSpacingIcon } from "../icons/LetterSpacingIcon";
 import { useElementsStore } from "../../stores/elementsStore";
 import { ColorPicker } from "../ColorPicker";
 import { FontPreview } from "../FontPreview";
+import { useFontsStore } from "../../stores/fontsStore";
+import { AddFont } from "./AddFont";
 
 const SPACES_REGEX = /\s+/g;
 
@@ -17,6 +17,7 @@ interface FontSectionProps {
 
 export function FontSection({ selectedElement }: FontSectionProps) {
   const updateElement = useElementsStore((state) => state.updateElement);
+  const { allFonts, installedFonts, installFont } = useFontsStore();
 
   if (selectedElement.tag !== "p" && selectedElement.tag !== "span") {
     return null;
@@ -25,32 +26,40 @@ export function FontSection({ selectedElement }: FontSectionProps) {
   return (
     <Flex direction="column" gap="2">
       <Text size="1">Font</Text>
-      <Grid columns="2" gap="2">
+      <Flex direction="row" gap="2" className="justify-between">
         <Select.Root
           onValueChange={(value) => {
-            const font = value as unknown as Font;
+            const font = value;
+            const weights = allFonts.find((f) => f.name === font)?.weights;
+
+            if (!installedFonts.has(font)) {
+              installFont(font);
+            }
 
             updateElement({
               ...selectedElement,
               fontFamily: font,
-              fontWeight: FONT_WEIGHTS[font].includes(
-                selectedElement.fontWeight,
-              )
+              fontWeight: weights?.includes(selectedElement.fontWeight)
                 ? selectedElement.fontWeight
                 : 400,
             });
           }}
           value={selectedElement.fontFamily}
         >
-          <Select.Trigger color="gray" variant="soft" />
+          <Select.Trigger color="gray" variant="soft" className="flex-1" />
           <Select.Content variant="soft">
-            {FONTS.map((font) => (
+            {Array.from(installedFonts).map((font) => (
               <Select.Item key={font} value={font}>
                 <FontPreview font={font} />
               </Select.Item>
             ))}
           </Select.Content>
         </Select.Root>
+
+        <AddFont selectedElement={selectedElement} />
+      </Flex>
+
+      <Grid columns="2" gap="2">
         <Select.Root
           onValueChange={(value) => {
             updateElement({
@@ -62,11 +71,14 @@ export function FontSection({ selectedElement }: FontSectionProps) {
         >
           <Select.Trigger color="gray" variant="soft" />
           <Select.Content variant="soft">
-            {FONT_WEIGHTS[selectedElement.fontFamily].map((weight) => (
-              <Select.Item key={weight} value={String(weight)}>
-                {weight}
-              </Select.Item>
-            ))}
+            {allFonts
+              .find(({ name }) => name === selectedElement.fontFamily)
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- the ? is definitely required
+              ?.weights?.map((weight) => (
+                <Select.Item key={weight} value={String(weight)}>
+                  {weight}
+                </Select.Item>
+              ))}
           </Select.Content>
         </Select.Root>
         <TextField.Root
