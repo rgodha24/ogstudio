@@ -1,5 +1,4 @@
 import type { OGElement } from "./types";
-import { unstable_cache } from "next/cache";
 
 export const DEFAULT_FONTS = [
   "Roboto",
@@ -23,17 +22,15 @@ export const DEFAULT_FONTS = [
 export function maybeLoadFont(font: string, weight: number) {
   const fontID = font.toLowerCase().replaceAll(" ", "-");
   const fontURL = getFontURL(font, weight);
+  const id = `font-${fontID}-${weight}`;
 
-  // Check if we've already added this font
-  if (document.getElementById(fontID)) {
-    return; // Font style has already been added, no need to add it again
+  if (document.getElementById(id)) {
+    return;
   }
 
-  // Create a style element
   const style = document.createElement("style");
-  style.id = fontID;
+  style.id = id;
 
-  // Define the @font-face rule
   const fontFace = `
     @font-face {
       font-family: "${font}";
@@ -43,10 +40,7 @@ export function maybeLoadFont(font: string, weight: number) {
     }
   `;
 
-  // Add the @font-face rule to the style element
   style.appendChild(document.createTextNode(fontFace));
-
-  // Append the style element to the head of the document
   document.head.appendChild(style);
 }
 
@@ -76,7 +70,8 @@ export async function loadFonts(elements: OGElement[]): Promise<FontData[]> {
           return fontCache;
         }
 
-        if (element.tag !== "p" && element.tag !== "span") throw "unreachable!";
+        if (element.tag !== "p" && element.tag !== "span")
+          throw new Error("unreachable!");
 
         const data = await fetch(
           getFontURL(element.fontFamily, element.fontWeight),
@@ -94,7 +89,7 @@ export async function loadFonts(elements: OGElement[]): Promise<FontData[]> {
   );
 }
 
-async function getFontDataInternal() {
+export async function getFontData() {
   interface FontsourceFont {
     id: string;
     family: string;
@@ -113,7 +108,7 @@ async function getFontDataInternal() {
     cache: "no-store",
   });
 
-  const data: FontsourceFont[] = await res.json();
+  const data = (await res.json()) as FontsourceFont[];
 
   return data
     .filter(({ styles }) => styles.includes("normal"))
@@ -123,10 +118,6 @@ async function getFontDataInternal() {
       weights: font.weights,
     }));
 }
-
-export const getFontData = unstable_cache(getFontDataInternal, ["font-data"], {
-  revalidate: 60 * 60 * 24 * 7,
-});
 
 export type Font = Awaited<ReturnType<typeof getFontData>>[number];
 
